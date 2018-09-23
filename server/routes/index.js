@@ -1,6 +1,6 @@
 const bodyParser = require('body-parser')
 
-// const authRoute = require('./authRoute')
+const authRoute = require('./authRoute')
 const studentRoute = require('./studentRoute')
 const mentorRoute = require('./mentorRoute')
 
@@ -16,7 +16,7 @@ module.exports = (app) => {
     res.send('Welcome Fuel Bag')
   })
 
-  // app.use('/api/auth', authRoute)
+  app.use('/api/auth', authRoute)
   app.use('/api/student', studentRoute)
   app.use('/api/mentor', mentorRoute)
 

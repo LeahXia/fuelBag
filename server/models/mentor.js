@@ -13,12 +13,4 @@ const mentorSchema = mongoose.Schema({
   fuel: { type: Number }
 })
 
-// Compare password
-mentorSchema.methods.comparePassword = (password, databasePassword) => {
-  if (password == databasePassword) {
-    return true
-  }
-  return false
-}
-
 module.exports = mongoose.model('Mentor', mentorSchema)
