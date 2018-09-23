@@ -1,8 +1,11 @@
 const mongoose = require('mongoose')
 const { studentSchema } = require('../models/student')
 const { mentorSchema } = require('../models/mentor')
+const { mentorRequestSchema } = require('../models/mentorRequest')
 
 const Student = mongoose.model('Student', studentSchema)
+const Mentor = mongoose.model('Mentor', mentorSchema)
+const MentorRequest = mongoose.model('MentorRequest', mentorRequestSchema)
 
 module.exports.createStudent = (req, res, done) => {
   // Create new Student
@@ -16,7 +19,43 @@ module.exports.createStudent = (req, res, done) => {
     .catch((error) => {
       return done(error)
     })    
+} 
+
+module.exports.requireMentorBySpendingFuel = async (req, res, done) => {
+  const studentId = req.params.userId
+  const mentorId = req.body.mentorId
+  const fuelSpent = req.body.fuelSpent
+
+  try {
+    const student = await Student.findById(studentId)
+    const mentor = await Mentor.findById(mentorId)
+
+    const mentorRequire = new MentorRequest({
+      student,
+      mentor,
+      fuelSpent
+    })
+
+    const databaseMentorRequire = await MentorRequest.findOne({
+      'student._id': studentId ,
+      'mentor._id': mentorId
+    })
+
+    if (databaseMentorRequire) {
+      let err = new Error('Request is already existed')
+      err.status = 400
+      return done(err)
+    }
+
+    await mentorRequire.save()
+
+    res.status(200).json({ sentDate: mentorRequire.sentDate })
+
+  } catch (err) {
+    done(err)
+  }
 }
+
 
 module.exports.getAllRequestedMentors = (req, res, done) => {
   

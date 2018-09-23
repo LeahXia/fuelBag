@@ -13,4 +13,3 @@ module.exports.getAllMentors = async (req, res, done) => {
         done(err)
     }
 }
-
