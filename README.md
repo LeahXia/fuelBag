@@ -16,7 +16,12 @@ npm start
 
 There are X routes:
 
-- /                     | GET  |      - homepage
-- /api/student/create   | POST |      - return {studentId: studentId}
+- /                        | GET  |        - homepage
+- /api/student/create      | POST |        - return {studentId: studentId}
+- /api/student/:id/spend   | POST |        - send { mentorId: mentorId, fuelSpent: {Number} } 
+                                           - return {studentId: studentId}
+
+
+- /api/montor           | GET  |      - get all mentors
 
 The server is using a MongoDB database in mLab.
