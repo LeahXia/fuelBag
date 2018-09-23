@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { studentSchema } = require('../models/student')
+const { mentorSchema } = require('../models/mentor')
 
 const Student = mongoose.model('Student', studentSchema)
 
@@ -17,3 +18,6 @@ module.exports.createStudent = (req, res, done) => {
     })    
 }
 
+module.exports.getAllRequestedMentors = (req, res, done) => {
+  
+}
