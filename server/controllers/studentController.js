@@ -2,10 +2,12 @@ const mongoose = require('mongoose')
 const { studentSchema } = require('../models/student')
 const { mentorSchema } = require('../models/mentor')
 const { mentorRequestSchema } = require('../models/mentorRequest')
+const { communityFuelSchema } = require('../models/communityFuel')
 
 const Student = mongoose.model('Student', studentSchema)
 const Mentor = mongoose.model('Mentor', mentorSchema)
 const MentorRequest = mongoose.model('MentorRequest', mentorRequestSchema)
+const CommunityFuel = mongoose.model('CommunityFuel', communityFuelSchema)
 
 module.exports.createStudent = async (req, res, done) => {
   // Create new Student
@@ -22,7 +24,7 @@ module.exports.createStudent = async (req, res, done) => {
 module.exports.requireMentorBySpendingFuel = async (req, res, done) => {
   const studentId = req.params.userId
   const mentorId = req.body.mentorId
-  const fuelSpent = req.body.fuelSpent
+  const fuelSpent = parseInt(req.body.fuelSpent)
 
   try {
     const student = await Student.findById(studentId)
@@ -45,7 +47,19 @@ module.exports.requireMentorBySpendingFuel = async (req, res, done) => {
       return done(err)
     }
     await mentorRequire.save()
-    res.status(200).json({ sentDate: mentorRequire.sentDate })
+
+    // Handle Fuel
+    const communityFuel = await CommunityFuel.findOne({})
+    
+    communityFuel.fuel += fuelSpent
+    student.fuel -= fuelSpent
+    mentor.fuel += fuelSpent
+
+    await communityFuel.save()
+    await student.save()
+    await mentor.save()
+
+    res.status(200).json({ sentDate: mentorRequire.sentDate, fuelLeft: student.fuel })
   } catch (err) {
     done(err)
   }

@@ -6,7 +6,8 @@ const studentSchema = mongoose.Schema({
   firstName: { type: String },
   lastName: { type: String },
   email: { type: String, unique: true },
-  password: { type: String }
+  password: { type: String },
+  fuel: { type: Number, default: 500 }
 })
 
 // Compare password

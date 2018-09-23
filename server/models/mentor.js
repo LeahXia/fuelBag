@@ -9,7 +9,8 @@ const mentorSchema = mongoose.Schema({
   password: { type: String },
   role: { type: String },
   company: { type: String },
-  linkedIn: { type: String }
+  linkedIn: { type: String },
+  fuel: { type: Number }
 })
 
 // Compare password
