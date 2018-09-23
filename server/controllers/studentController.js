@@ -7,18 +7,16 @@ const Student = mongoose.model('Student', studentSchema)
 const Mentor = mongoose.model('Mentor', mentorSchema)
 const MentorRequest = mongoose.model('MentorRequest', mentorRequestSchema)
 
-module.exports.createStudent = (req, res, done) => {
+module.exports.createStudent = async (req, res, done) => {
   // Create new Student
   const student = new Student(req.body)
-
   // Save Student
-  return student.save()
-    .then((newStudent) => {
-      return res.status(200).json({ studentId: newStudent._id })
-    })
-    .catch((error) => {
-      return done(error)
-    })    
+  try {
+    const newStudent = await student.save()
+    return res.status(200).json({ studentId: newStudent._id })
+  } catch (error) {
+    return done(error)
+  }
 } 
 
 module.exports.requireMentorBySpendingFuel = async (req, res, done) => {
@@ -57,6 +55,18 @@ module.exports.requireMentorBySpendingFuel = async (req, res, done) => {
 }
 
 
-module.exports.getAllRequestedMentors = (req, res, done) => {
-  
+module.exports.getAllRequestedMentors = async (req, res, done) => {
+  const studentId = req.params.userId
+
+  try {
+    const mentorRequests = await MentorRequest.find({ 'student._id': studentId })
+    if (mentorRequests.length == 0) {
+      let err = new Error('No request found')
+      err.status = 404
+      return done(err)
+    }
+    res.status(200).json(mentorRequests)
+  } catch(error) {
+    return done(err)
+  }
 }

@@ -17,9 +17,9 @@ npm start
 There are X routes:
 
 - /                        | GET  |        - homepage
-- /api/student/create      | POST |        - return {studentId: studentId}
+- /api/student/create      | POST |        - return {studentId: studentId} 400 if already existed
 - /api/student/:id/spend   | POST |        - send { mentorId: mentorId, fuelSpent: {Number} } 
-                                           - return {studentId: studentId}
+                                           - return {studentId: studentId} or 400 if already existed
 
 
 - /api/montor           | GET  |      - get all mentors
