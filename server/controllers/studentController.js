@@ -44,29 +44,30 @@ module.exports.requireMentorBySpendingFuel = async (req, res, done) => {
       err.status = 400
       return done(err)
     }
-
     await mentorRequire.save()
-
     res.status(200).json({ sentDate: mentorRequire.sentDate })
-
   } catch (err) {
     done(err)
   }
 }
-
 
 module.exports.getAllRequestedMentors = async (req, res, done) => {
   const studentId = req.params.userId
 
   try {
     const mentorRequests = await MentorRequest.find({ 'student._id': studentId })
+    
     if (mentorRequests.length == 0) {
       let err = new Error('No request found')
       err.status = 404
       return done(err)
     }
-    res.status(200).json(mentorRequests)
-  } catch(error) {
-    return done(err)
+    let mentors = []
+    for(const mentorRequest of mentorRequests) {
+      mentors.push(mentorRequest.mentor)
+    }
+    res.status(200).json(mentors)
+  } catch(error) {    
+    return done(error)
   }
 }
