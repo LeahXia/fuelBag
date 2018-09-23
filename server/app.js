@@ -1,7 +1,9 @@
 const express = require('express')
-const http = require('http')
+var cors = require('cors')
 
 const app = express()
+
+app.use(cors())
 
 require('./start/security')(app)
 require('./start/db')()

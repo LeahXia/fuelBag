@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser')
 
 // const authRoute = require('./authRoute')
+const studentRoute = require('./studentRoute')
 
 const error = require('../middleware/error')
 
@@ -15,6 +16,7 @@ module.exports = (app) => {
   })
 
   // app.use('/api/auth', authRoute)
+  app.use('/api/student', studentRoute)
 
   app.use(error)
 }
